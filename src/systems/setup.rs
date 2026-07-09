@@ -1,7 +1,11 @@
 use bevy::prelude::*;
 
 use crate::constants::*;
-use crate::components::player::Player;
+use crate::components::player::{
+  Player,
+  Velocity,
+  Grounded
+};
 
 pub fn setup(
   mut commands: Commands,
@@ -12,6 +16,8 @@ pub fn setup(
 
   commands.spawn((
     Player,
+    Velocity::default(),
+    Grounded(true),
     Mesh2d(meshes.add(Rectangle::new(TILE_SIZE, TILE_SIZE))),
     MeshMaterial2d(materials.add(Color::WHITE)),
     Transform::default()

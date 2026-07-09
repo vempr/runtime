@@ -6,8 +6,11 @@ mod constants;
 mod components;
 mod systems;
 
-use systems::setup::setup;
-use systems::input::jump;
+use systems::{
+  setup::setup,
+  input::jump,
+  physics::process
+};
 
 fn main() {
 	App::new()
@@ -24,6 +27,6 @@ fn main() {
       })
     )
     .add_systems(Startup, setup)
-    .add_systems(Update, jump)
+    .add_systems(Update, (process, jump))
     .run();
 }
