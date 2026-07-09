@@ -9,7 +9,8 @@ mod systems;
 use systems::{
   setup::setup,
   input::jump,
-  physics::process
+  physics::process,
+  camera::follow_player
 };
 
 fn main() {
@@ -27,6 +28,10 @@ fn main() {
       })
     )
     .add_systems(Startup, setup)
-    .add_systems(Update, (process, jump))
+    .add_systems(Update, (
+      process,
+      jump,
+      follow_player
+    ).chain())
     .run();
 }
