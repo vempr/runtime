@@ -5,7 +5,8 @@ use crate::components::{
   player::{
     Player,
     Velocity,
-    Grounded
+    Grounded,
+    JumpRotation
   },
   world::{
     Tile
@@ -17,7 +18,16 @@ pub fn setup(
   mut meshes: ResMut<Assets<Mesh>>,
   mut materials: ResMut<Assets<ColorMaterial>>
 ) {
-  commands.spawn(Camera2d);
+  let mut ortho = OrthographicProjection::default_2d();
+  ortho.scaling_mode = bevy::camera::ScalingMode::AutoMin {
+    min_width: VIRTUAL_WIDTH,
+    min_height: VIRTUAL_HEIGHT
+  };
+
+  commands.spawn((
+    Camera2d,
+    Projection::Orthographic(ortho)
+  ));
 
   // tiles for testing
 
@@ -56,6 +66,7 @@ pub fn setup(
       y: 0.0
     },
     Grounded(true),
+    JumpRotation::default(),
     Mesh2d(meshes.add(Rectangle::new(TILE_SIZE, TILE_SIZE))),
     MeshMaterial2d(materials.add(Color::WHITE)),
     Transform::default()

@@ -11,3 +11,8 @@ pub struct Velocity {
 
 #[derive(Component, Default)]
 pub struct Grounded(pub bool);
+
+#[derive(Component, Default)]
+pub struct JumpRotation {
+  pub remaining: f32
+}

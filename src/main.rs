@@ -13,6 +13,16 @@ use systems::{
   camera::follow_player
 };
 
+#[derive(States, Default, Hash, Clone, Debug, Eq, PartialEq)]
+enum GameState {
+  #[default]
+  Playing,
+  Dead,
+  MainMenu,
+  Pause,
+  Loading
+}
+
 fn main() {
 	App::new()
     .add_plugins(DefaultPlugins
@@ -27,11 +37,17 @@ fn main() {
         ..default()
       })
     )
+    .init_state::<GameState>()
     .add_systems(Startup, setup)
-    .add_systems(Update, (
-      process,
-      jump,
-      follow_player
-    ).chain())
+    .add_systems(
+      Update,
+      (
+        process,
+        jump,
+        follow_player
+      )
+      .chain()
+      .run_if(in_state(GameState::Playing))
+    )
     .run();
 }
