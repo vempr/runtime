@@ -9,7 +9,8 @@ use crate::components::{
     JumpRotation
   },
   world::{
-    Tile
+    Tile,
+    Spike
   }
 };
 
@@ -18,6 +19,22 @@ pub fn setup(
   mut meshes: ResMut<Assets<Mesh>>,
   mut materials: ResMut<Assets<ColorMaterial>>
 ) {
+  spawn_camera(commands.reborrow());
+
+  spawn_level(
+    &mut commands,
+    &mut meshes,
+    &mut materials
+  );
+
+  spawn_player(
+    &mut commands,
+    &mut meshes,
+    &mut materials
+  );
+}
+
+fn spawn_camera(mut commands: Commands) {
   let mut ortho = OrthographicProjection::default_2d();
   ortho.scaling_mode = bevy::camera::ScalingMode::AutoMin {
     min_width: VIRTUAL_WIDTH,
@@ -28,8 +45,14 @@ pub fn setup(
     Camera2d,
     Projection::Orthographic(ortho)
   ));
+}
 
-  // tiles for testing
+pub fn spawn_level(
+  commands: &mut Commands,
+  meshes: &mut Assets<Mesh>,
+  materials: &mut Assets<ColorMaterial>
+) {
+   // tiles for testing
 
   let tile_count: i32 = 30;
   for i in 0..tile_count {
@@ -57,8 +80,21 @@ pub fn setup(
     ));
   }
 
-  // tiles for testing
+  commands.spawn((
+    Spike,
+    Mesh2d(meshes.add(Rectangle::new(TILE_SIZE, TILE_SIZE))),
+    MeshMaterial2d(materials.add(Color::srgb(1.0, 0.0, 0.0))),
+    Transform::from_xyz(50.0 * TILE_SIZE, GROUND_Y + TILE_SIZE * 2.0, 0.0)
+  ));
 
+  // tiles for testing
+}
+
+pub fn spawn_player(
+  commands: &mut Commands,
+  meshes: &mut Assets<Mesh>,
+  materials: &mut Assets<ColorMaterial>
+) {
   commands.spawn((
     Player,
     Velocity {

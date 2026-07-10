@@ -9,6 +9,7 @@ mod systems;
 use systems::{
   setup::setup,
   input::jump,
+  input::restart,
   physics::process,
   camera::follow_player
 };
@@ -48,6 +49,10 @@ fn main() {
       )
       .chain()
       .run_if(in_state(GameState::Playing))
+    )
+    .add_systems(
+      Update,
+      restart
     )
     .run();
 }
